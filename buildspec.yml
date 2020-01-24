@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+
+  install:
+      commands:
+      - apt install unzip -y
+      - cd /usr/bin
+      - echo installing terraform
+      - curl -O https://releases.hashicorp.com/terraform/0.12.6/terraform_0.12.6_linux_amd64.zip
+      - unzip terraform_0.12.6_linux_amd64.zip
+      - echo terraform installed on 'date'
+      - cd "$CODEBUILD_SRC_DIR"
+      - curl -L "$(curl -Ls https://api.github.com/repos/terraform-linters/tflint/releases/latest | grep -o -E "https://.+?_linux_amd64.zip")" -o tflint.zip && unzip tflint.zip && rm tflint.zip
+      - tflint -v
+      - echo tflint instaled on 'date'
+  pre_build:
+    commands:
+      - pwd
+      - ls -lah
+#  build:
+#    commands:
+#      - terraform plan
+
+#  post_build:
+#    commands:
+#      - echo terraform $TF_COMMAND completed on `date`
